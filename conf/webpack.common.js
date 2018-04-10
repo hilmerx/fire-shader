@@ -15,7 +15,7 @@ module.exports = {
   devtool: 'source-map', // enhance debugging by adding meta info for the browser devtools
 
   entry: {
-    app: './index.js'
+    app: './js/App.js'
   },
 
   output: {
@@ -31,12 +31,8 @@ module.exports = {
   },
 
   module: {
-    rules: [{
-      enforce: "pre", //to check source files, not modified by other loaders (like babel-loader)
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: "eslint-loader"
-    }, {
+    rules: [
+    {
       test: /\.js$/,
       exclude: /node_modules/,
       use: {
@@ -45,7 +41,14 @@ module.exports = {
           presets: ['env']
         }
       }
-    },{
+    },
+    {
+      test: /\.glsl$/,
+      use: {
+        loader: 'webpack-glsl-loader'
+      }
+    },
+    {
         test: /\.scss$/,
         use: extractSass.extract({
             use: [{
@@ -62,10 +65,20 @@ module.exports = {
             // use style-loader in development
             fallback: "style-loader"
         })
-    }]
+    },
+    {
+        test: /\.(png|jpg|gif|json)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {}  
+          }
+        ]
+      }
+    ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist'], {root: process.cwd()}),
+    // new CleanWebpackPlugin(['dist'], {root: process.cwd()}),
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor"
     }),
