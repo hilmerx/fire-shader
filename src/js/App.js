@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import dat from 'dat.gui'
 import Ember from './Ember'
-import noise from './Noise'
 THREE.OrbitControls = require('three-orbit-controls')(THREE)
 
 import lowpolyscene from '../assets/lowpolyscene.json'
@@ -111,7 +110,7 @@ class Scene {
     initFireplace () {
         this.ember = new Ember()
         this.scene.add(this.ember.pointField)
-        this.ember.pointField.position.set(-102, 5, 55)
+        this.ember.pointField.position.set(-101, 4, 53.5)
     }
 
     initHelpers() {

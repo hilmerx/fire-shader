@@ -8,8 +8,8 @@ import particle from '../assets/particle.png'
 
 export default class Ember {
     constructor () {
-        this.width = 14
-        this.instances = 2500
+        this.width = 11
+        this.instances = 3500
         this.time = 0.0
         this.initPoints()
 
@@ -24,19 +24,14 @@ export default class Ember {
             return buffer
         }
 
-        // let pointGeometry = new THREE.Geometry()
         var pointGeometry = new THREE.InstancedBufferGeometry()
-
-        // for ( let i = 0; i < 5; i ++ ) {
-        //     let point = this.createPoint()
-        //     pointGeometry.vertices.push( point )
-        // }
 
         let vertices = new Float32Array([0.0, 0.0, 0.0])
         pointGeometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) )
 
         let offsets = new THREE.InstancedBufferAttribute(new Float32Array( this.instances * 3), 3, 1)
         let distsToMiddle = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
+        let rInterpolated = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
         for (let i = 0, ul = offsets.count; i < ul; i++) {
             let a = Math.random() * 2 * Math.PI
             let r = this.width/2 * Math.sqrt(Math.random())
@@ -46,19 +41,29 @@ export default class Ember {
             let randZ = r * Math.sin(a)
 
             offsets.setXYZ(i, randX, 0, randZ)
-            distsToMiddle.setX(i, (this.width-(r*2))/this.width)
+
+            let distToMiddle = (this.width- (r * 2)) / this.width
+            distsToMiddle.setX(i, distToMiddle)
+            rInterpolated.setX(i, distToMiddle / this.width)
         }
 
         pointGeometry.addAttribute('offset', offsets)
         pointGeometry.addAttribute('r', distsToMiddle)
-        pointGeometry.addAttribute('rInt', distsToMiddle)
-
+        pointGeometry.addAttribute('rInterpolated', rInterpolated)
 
         let timeOffsets = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
         for (let i = 0, ul = offsets.count; i < ul; i++) {
             timeOffsets.setX(i, 25*Math.random()+25)
         }
         pointGeometry.addAttribute('timeOffset', timeOffsets)
+
+        let heights = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
+        for (let i = 0, ul = offsets.count; i < ul; i++) {
+            let distToMiddle = distsToMiddle.getX(i)
+            let height = 30 * Math.pow(distToMiddle, 0.35) * Math.random()
+            heights.setX(i, height)
+        }
+        pointGeometry.addAttribute('height', heights)
 
         let onThresholds = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
         for (let i = 0, ul = offsets.count; i < ul; i++) {
@@ -73,7 +78,6 @@ export default class Ember {
             speed.setX(i, (Math.random()+0.5)/1.5)
         }
         pointGeometry.addAttribute('speed', speed)
-
 
         this.pointMaterial = new THREE.ShaderMaterial({
             uniforms: {
