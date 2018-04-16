@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import dat from 'dat.gui'
 import Ember from './Ember'
+import noise from './Noise'
 THREE.OrbitControls = require('three-orbit-controls')(THREE)
 
 import lowpolyscene from '../assets/lowpolyscene.json'
