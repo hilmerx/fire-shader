@@ -80,10 +80,9 @@ export default class Ember {
 
         let speed = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
         for (let i = 0, ul = offsets.count; i < ul; i++) {
-
-            speed.setX(i, 1)
-            // speed.setX(i, (Math.random()+0.5)/1.5)
+            speed.setX(i, (Math.random()+0.5)/1.5)
         }
+
         pointGeometry.addAttribute('speed', speed)
 
         this.pointMaterial = new THREE.ShaderMaterial({
@@ -142,6 +141,7 @@ export default class Ember {
         this.pointField.material.uniforms.time.value = this.time
 
         this.amount = (this.noise.getVal(this.time) + 0.2) / 1.2
+        // this.amount = this.noise.getVal(this.time) / 1
         this.pointField.material.uniforms.amount.value = this.amount
     }
 }

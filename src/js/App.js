@@ -275,14 +275,14 @@ class Scene {
             let deltaTime2 = (time%400)/(400/2)
             let deltaTime3 = (time%2456)/(2456/2)
             let deltaTime4 = (time%1200)/(1000/2)
-            this.campfireLight.intensity = deltaTime1 + deltaTime2 + deltaTime3 + deltaTime4 + this.campfireLightSettings.baseLineIntensity
+            this.campfireLight.intensity = (deltaTime1 + deltaTime2 + deltaTime3 + deltaTime4 + this.campfireLightSettings.baseLineIntensity)*0.7
 
         }
     }
 
 
     update(time) {
-        // this.animateCampfire(time)
+        this.animateCampfire(time)
         this.ember.update()
     }
 }
