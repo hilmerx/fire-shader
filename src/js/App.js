@@ -282,7 +282,7 @@ class Scene {
 
 
     update(time) {
-        this.animateCampfire(time)
+        // this.animateCampfire(time)
         this.ember.update()
     }
 }

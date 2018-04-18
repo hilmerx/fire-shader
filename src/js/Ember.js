@@ -8,7 +8,7 @@ import particle from '../assets/particle.png'
 
 export default class Ember {
     constructor () {
-        this.width = 11
+        this.width = 13
         this.instances = 3500
         this.time = 0.0
         this.initPoints()
@@ -17,9 +17,11 @@ export default class Ember {
 
     initPoints () {
         function weight(number, scale, min = 0, max = 1) {
-            let diff = max - min
+            let buffer
+            let diff
+            diff = max - min
             number /= diff
-            let buffer = Math.pow(number, scale) 
+            buffer = Math.pow(number, scale)
             buffer *= diff
             return buffer
         }
@@ -35,7 +37,9 @@ export default class Ember {
         for (let i = 0, ul = offsets.count; i < ul; i++) {
             let a = Math.random() * 2 * Math.PI
             let r = this.width/2 * Math.sqrt(Math.random())
-            r = weight(r, 3, 0, this.width/2)
+            r = weight(r, 0.4, 0, this.width/2)
+            r = ((this.width / 2) - r)
+            r = (this.width / 2) * Math.sqrt(r/(this.width/2))
 
             let randX = r * Math.cos(a)
             let randZ = r * Math.sin(a)
@@ -59,8 +63,10 @@ export default class Ember {
 
         let heights = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
         for (let i = 0, ul = offsets.count; i < ul; i++) {
+            let height
             let distToMiddle = distsToMiddle.getX(i)
-            let height = 30 * Math.pow(distToMiddle, 0.35) * Math.random()
+            height = 27 * Math.pow(distToMiddle, 0.35) * Math.random()
+            
             heights.setX(i, height)
         }
         pointGeometry.addAttribute('height', heights)
@@ -75,7 +81,8 @@ export default class Ember {
         let speed = new THREE.InstancedBufferAttribute(new Float32Array( this.instances ), 1, 1)
         for (let i = 0, ul = offsets.count; i < ul; i++) {
 
-            speed.setX(i, (Math.random()+0.5)/1.5)
+            speed.setX(i, 1)
+            // speed.setX(i, (Math.random()+0.5)/1.5)
         }
         pointGeometry.addAttribute('speed', speed)
 
@@ -86,7 +93,8 @@ export default class Ember {
                 texture1: { type: 't', value: new THREE.TextureLoader().load(particle)},
                 size: { type: 'f', value: 10000.0 },
                 maxOffset: { type: 'f', value: 100.0 },
-                width: { type: 'f', value: this.width }
+                width: { type: 'f', value: this.width },
+                uTwist: { type: 'f', value: 2.0 }
             },
             vertexShader: emberVS,
             fragmentShader: emberFS,
