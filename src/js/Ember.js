@@ -65,7 +65,7 @@ export default class Ember {
         for (let i = 0, ul = offsets.count; i < ul; i++) {
             let height
             let distToMiddle = distsToMiddle.getX(i)
-            height = 27 * Math.pow(distToMiddle, 0.35) * Math.random()
+            height = 35 * Math.pow(distToMiddle, 0.35) * Math.random()
             
             heights.setX(i, height)
         }
